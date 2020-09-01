@@ -8,6 +8,7 @@ import android.graphics.PointF
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.withStyledAttributes
 import fillooow.app.customviewproject.R
 import kotlin.math.cos
 import kotlin.math.min
@@ -23,6 +24,10 @@ internal class DialView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 
 ) : View(context, attrs, defStyleAttr) {
+
+    private var fanSpeedLowColor = 0
+    private var fanSpeedMediumColor = 0
+    private var fanSpeedMaxColor = 0
 
     private var radius = 0.0f
     private var fanSpeed = FanSpeed.OFF
@@ -40,6 +45,12 @@ internal class DialView @JvmOverloads constructor(
 
     init {
         isClickable = true
+
+        context.withStyledAttributes(attrs, R.styleable.DialView) {
+            fanSpeedLowColor = getColor(R.styleable.DialView_fanColor1, 0)
+            fanSpeedMediumColor = getColor(R.styleable.DialView_fanColor2, 0)
+            fanSpeedMaxColor = getColor(R.styleable.DialView_fanColor3, 0)
+        }
     }
 
     override fun performClick(): Boolean {
@@ -66,9 +77,10 @@ internal class DialView @JvmOverloads constructor(
         super.onDraw(canvas)
 
         paint.color = when (fanSpeed) {
-
             FanSpeed.OFF -> Color.GRAY
-            else -> Color.GREEN
+            FanSpeed.LOW -> fanSpeedLowColor
+            FanSpeed.MEDIUM -> fanSpeedMediumColor
+            FanSpeed.HIGH -> fanSpeedMaxColor
         }
 
         drawFan(canvas)
