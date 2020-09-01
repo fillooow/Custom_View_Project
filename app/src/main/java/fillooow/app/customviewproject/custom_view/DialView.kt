@@ -38,6 +38,25 @@ internal class DialView @JvmOverloads constructor(
         typeface = Typeface.create( "", Typeface.BOLD)
     }
 
+    init {
+        isClickable = true
+    }
+
+    override fun performClick(): Boolean {
+
+        /**
+         * Сделано, чтобы можно было обрабатывать onClickListener отдельно
+         * от обычного тапа по вьюхе, реализованного ниже
+         */
+        if (super.performClick()) return true
+
+        fanSpeed = fanSpeed.next()
+        contentDescription = resources.getString(fanSpeed.label)
+
+        invalidate()
+        return true
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
 
         radius = (min(width, height) / 2.0 * 0.8).toFloat()
@@ -98,4 +117,11 @@ private enum class FanSpeed(val label: Int) {
     LOW(R.string.fan_low),
     MEDIUM(R.string.fan_medium),
     HIGH(R.string.fan_high);
+
+    fun next() = when (this) {
+        OFF -> LOW
+        LOW -> MEDIUM
+        MEDIUM -> HIGH
+        HIGH -> OFF
+    }
 }
