@@ -35,6 +35,7 @@ internal class DialView @JvmOverloads constructor(
     // position variable which will be used to draw label and indicator circle position
     private val pointPosition: PointF = PointF(0.0f, 0.0f)
 
+    // Флаг для сглаживания пикселей
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
 
         style = Paint.Style.FILL
